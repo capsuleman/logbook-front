@@ -1,0 +1,5 @@
+<label for="date-select">Choose a date:</label>
+
+<select id="date-select" (change)="sendDate()" [(ngModel)]="target">
+    <option *ngFor="let date of dates" [value]="date" [selected]="date == target">{{ date }}</option>
+</select>

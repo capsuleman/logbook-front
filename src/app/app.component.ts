@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -10,16 +11,16 @@ import { AuthService } from './auth.service';
 export class AppComponent implements OnInit {
   title = 'logbook-front';
 
-  constructor(private authService: AuthService) { }
+  constructor(
+    private authService: AuthService,
+    private router: Router
+    ) { }
 
   ngOnInit() {
-    this.login();
+    if (this.authService.isLoggedOut()) {
+      this.router.navigateByUrl('/login');
+    }
+    console.log(this.authService.getExpiration());
   }
 
-  login() {
-    const u = 'Milo';
-    const p = 'password';
-    this.authService.login(u, p)
-        .subscribe(res => {});
-  }
 }

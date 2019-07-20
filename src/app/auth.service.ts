@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/internal/operators';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 import * as moment from 'moment';
 
@@ -20,14 +20,12 @@ export class AuthService {
     return this.http.post(this.apiUrl + '/auth/login', { username, password })
       .pipe(tap(res => {
         this.setSession(res);
-        console.log('test');
-        this.me().subscribe(rep => {
-          console.log(rep);
-        });
+        return res;
       }));
   }
 
   private setSession(authResult) {
+    console.log(authResult);
     const expiresAt = moment().add(authResult.expiresIn, 'second');
 
     localStorage.setItem('id_token', authResult.token);
@@ -44,6 +42,7 @@ export class AuthService {
   }
 
   public isLoggedIn() {
+    console.log(moment());
     return moment().isBefore(this.getExpiration());
   }
 
@@ -55,5 +54,13 @@ export class AuthService {
     const expiration = localStorage.getItem('expires_at');
     const expiresAt = JSON.parse(expiration);
     return moment(expiresAt);
+  }
+
+  setPublicKey(publicKey: string) {
+    return this.http.post(this.apiUrl + '/auth/key', {key: publicKey});
+  }
+
+  deletePublicKey() {
+    return this.http.delete(this.apiUrl + '/auth/key');
   }
 }
