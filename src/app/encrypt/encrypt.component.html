@@ -1,8 +1,15 @@
 <div>
-    <textarea [(ngModel)]="publicKey" rows="6" cols="65" id="publicKeyText"></textarea>
+    <div>Public key (stored in server)</div>
+
+    <textarea [(ngModel)]="publicKey" rows="6" cols="65" id="publicKeyText" style="resize:none"></textarea>
     <button (click)="savePublicKey()" id="publicKeyButton">Save public key</button>
 </div>
 <div>
-    <textarea [(ngModel)]="privateKey" rows="15" cols="65"></textarea>
+    <div>Private key (stored in server)</div>
+    <textarea [(ngModel)]="privateKey" rows="15" cols="65" style="resize:none"></textarea>
     <button (click)="setPrivateKey()">Use private key</button>
+</div>
+<div *ngIf="showCheckbox">
+    <div>Decrypting?</div>
+    <input type="checkbox" (change)="setDecryptingEvent()" [(ngModel)]="decrypting">
 </div>

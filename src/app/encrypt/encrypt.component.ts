@@ -10,9 +10,12 @@ export class EncryptComponent implements OnInit {
 
   privateKey = '';
   publicKey = '';
+  decrypting = false;
+  showCheckbox = false;
 
   @Output() privateKeyEvent = new EventEmitter<string>();
   @Output() publicKeyEvent = new EventEmitter<string>();
+  @Output() decryptingEvent = new EventEmitter<boolean>();
 
   constructor(
     private authService: AuthService
@@ -43,6 +46,12 @@ export class EncryptComponent implements OnInit {
 
   setPrivateKey() {
     this.privateKeyEvent.emit(this.privateKey);
+    this.decrypting = true;
+    this.setDecryptingEvent();
+    this.showCheckbox = true;
   }
 
+  setDecryptingEvent() {
+    this.decryptingEvent.emit(this.decrypting);
+  }
 }

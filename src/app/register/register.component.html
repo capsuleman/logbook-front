@@ -1,5 +1,5 @@
 <fieldset>
-    <legend>Login</legend>
+    <legend>Register</legend>
     <div class="form-field">
         <label>Username:</label>
         <input name="username" [(ngModel)]="username">
@@ -8,9 +8,11 @@
         <label>Password:</label>
         <input name="password" [(ngModel)]="password" type="password">
     </div>
-    <div class="form-buttons">
-        <button class="button button-primary" (click)="login()">Login</button>
+    <div class="form-field">
+        <label>Public key:</label>
+        <textarea name="publickey" rows="6" cols="65" [(ngModel)]="publickey"></textarea>
     </div>
 </fieldset>
-
-No account? Please <a routerLink="/register">sign-in</a>.
+<div class="form-buttons">
+    <button class="button button-primary" (click)="register()">Login</button>
+</div>

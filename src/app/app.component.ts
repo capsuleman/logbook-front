@@ -19,8 +19,9 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     if (this.authService.isLoggedOut()) {
       this.router.navigateByUrl('/login');
+    } else {
+      this.router.navigateByUrl('/main');
     }
-    console.log(this.authService.getExpiration());
   }
 
 }

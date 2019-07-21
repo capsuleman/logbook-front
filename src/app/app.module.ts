@@ -14,6 +14,7 @@ import { MessageComponent } from './message/message.component';
 import { MainComponent } from './main/main.component';
 import { CalendarComponent } from './calendar/calendar.component';
 import { EncryptComponent } from './encrypt/encrypt.component';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { EncryptComponent } from './encrypt/encrypt.component';
     MessageComponent,
     MainComponent,
     CalendarComponent,
-    EncryptComponent
+    EncryptComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,

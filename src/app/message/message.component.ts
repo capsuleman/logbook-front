@@ -14,8 +14,10 @@ export class MessageComponent implements OnInit, OnChanges {
     private encryptService: EncryptService
   ) { }
 
-  messages = [];
-  newText = '';
+  private messages = [];
+  private newText = '';
+  private decrypting = false;
+  private privateKeyExists = false;
   @Input() target: string;
 
   private dateToString(d: Date) {
@@ -45,6 +47,9 @@ export class MessageComponent implements OnInit, OnChanges {
   getMessages() {
     this.messageService.getMessages(this.target).subscribe(mess => {
       this.messages = mess;
+      if (this.privateKeyExists) {
+        this.decryptMessages();
+      }
     });
   }
 
@@ -74,7 +79,12 @@ export class MessageComponent implements OnInit, OnChanges {
 
   setPrivateKey($event: string) {
     this.encryptService.setPrivateKey($event);
-    this.messages.map(message => message.decrypted = this.decrypt(message.message));
+    this.privateKeyExists = true;
+    this.decryptMessages();
+  }
+
+  setDecryptingEvent($event: boolean) {
+    this.decrypting = $event;
   }
 
   encrypt(text: string) {
@@ -84,4 +94,8 @@ export class MessageComponent implements OnInit, OnChanges {
   decrypt(text: string) {
     return this.encryptService.decrypt(text);
   }
+  decryptMessages() {
+    this.messages.map(message => message.decrypted = this.decrypt(message.message));
+  }
+
 }
