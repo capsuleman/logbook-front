@@ -37,6 +37,11 @@ export class CalendarComponent implements OnInit {
           this.dates.push(el);
         }
       });
+      this.dates.sort((a, b) => {
+        const aDate = new Date(a);
+        const bDate = new Date(b);
+        return bDate.getTime() - aDate.getTime();
+      });
     });
     this.sendDate();
   }

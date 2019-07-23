@@ -47,6 +47,7 @@ export class MessageComponent implements OnInit, OnChanges {
   getMessages() {
     this.messageService.getMessages(this.target).subscribe(mess => {
       this.messages = mess;
+      this.messages.map(message => message.show = this.decrypting);
       if (this.privateKeyExists) {
         this.decryptMessages();
       }
@@ -61,8 +62,9 @@ export class MessageComponent implements OnInit, OnChanges {
     this.messageService.postMessage(newData).subscribe(id => {
       newData.decrypted = this.newText;
       this.newText = '';
-      newData.post = new Date();
+      newData.post = new Date().toISOString().substring(0, 19);
       newData.rowid = id;
+      newData.show = this.decrypting;
       this.messages.push(newData);
     });
   }
@@ -85,6 +87,7 @@ export class MessageComponent implements OnInit, OnChanges {
 
   setDecryptingEvent($event: boolean) {
     this.decrypting = $event;
+    this.messages.map(message => message.show = $event);
   }
 
   encrypt(text: string) {
@@ -98,4 +101,7 @@ export class MessageComponent implements OnInit, OnChanges {
     this.messages.map(message => message.decrypted = this.decrypt(message.message));
   }
 
+  test(a) {
+    console.log(a);
+  }
 }
