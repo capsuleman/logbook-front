@@ -1,10 +1,12 @@
 <h2>Content</h2>
 <ul>
-    <li *ngFor="let message of messages" (mouseover)="message.show = true" (mouseout)="message.show = false">
-        <span *ngIf="message.show && message.decrypted">
-            {{ message.post }}: {{ message.decrypted }}
+    <li *ngFor="let message of messages"
+        (mouseover)="message.show = true"
+        (mouseout)="message.show = false || message.decrypted">
+        <span *ngIf="message.show && message.decrypted" (click)="startEdit(message)">
+            {{ message.post }}: {{ message.decrypted.text }}
         </span>
-        <span *ngIf="!(message.show && message.decrypted)">
+        <span *ngIf="!(message.show && message.decrypted)" (click)="startEdit(message)">
             {{ message.post }}: {{ message.message }}
         </span>
         <button (click)="deleteMessage(message.rowid)">Delete</button>
@@ -12,7 +14,13 @@
 </ul>
 
 <textarea [(ngModel)]="newText"></textarea>
-<button class="button button-primary" (click)="addMessage()">Test</button>
+<button *ngIf="newType=='ADD'" class="button button-primary" (click)="addMessage()">Add</button>
+<button *ngIf="newType=='EDIT'" class="button button-primary" (click)="editMessage()">Edit</button>
 
-<app-encrypt (publicKeyEvent)="setPublicKey($event)" (privateKeyEvent)="setPrivateKey($event)"
-    (decryptingEvent)="setDecryptingEvent($event)"></app-encrypt>
+
+<app-encrypt
+    (publicKeyEvent)="setPublicKey($event)"
+    (privateKeyEvent)="setPrivateKey($event)"
+    (decryptingEvent)="setDecryptingEvent($event)"
+></app-encrypt>
+

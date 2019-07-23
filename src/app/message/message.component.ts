@@ -16,6 +16,8 @@ export class MessageComponent implements OnInit, OnChanges {
 
   private messages = [];
   private newText = '';
+  private newType = 'ADD';
+  private newTarget = 0;
   private decrypting = false;
   private privateKeyExists = false;
   @Input() target: string;
@@ -54,24 +56,51 @@ export class MessageComponent implements OnInit, OnChanges {
     });
   }
 
-  addMessage() {
+  postMessage(type, target, text, cb) {
     const newData: { [k: string]: any } = {};
-    newData.message = this.encrypt(this.newText);
+    const payload = {type, target, text};
+
+    newData.message = this.encrypt(JSON.stringify(payload));
     newData.target = this.target;
 
     this.messageService.postMessage(newData).subscribe(id => {
-      newData.decrypted = this.newText;
-      this.newText = '';
+      newData.decrypted = payload;
       newData.post = new Date().toISOString().substring(0, 19);
       newData.rowid = id;
       newData.show = this.decrypting;
+
+      cb(newData);
+
+      this.newType = 'ADD';
+      this.newTarget = 0;
+      this.newText = '';
+    });
+  }
+
+  addMessage() {
+    this.postMessage(this.newType, 0, this.newText, newData => {
       this.messages.push(newData);
     });
   }
 
+
   deleteMessage(id: number) {
-    this.messageService.deleteMessage(id).subscribe(() => {
+    this.postMessage('DELETE', id, '', newData => {
       this.messages = this.messages.filter(el => el.rowid !== id);
+    });
+  }
+
+  editMessage() {
+    const id = this.newTarget;
+    this.postMessage(this.newType, id, this.newText, newData => {
+      this.messages = this.messages.map(mess => {
+        if (mess.rowid === id) {
+          console.log(mess);
+          mess = newData;
+          console.log(mess);
+        }
+        return mess;
+      });
     });
   }
 
@@ -98,10 +127,16 @@ export class MessageComponent implements OnInit, OnChanges {
     return this.encryptService.decrypt(text);
   }
   decryptMessages() {
-    this.messages.map(message => message.decrypted = this.decrypt(message.message));
+    this.messages.map(message => message.decrypted = JSON.parse(this.decrypt(message.message)));
   }
 
-  test(a) {
-    console.log(a);
+  startEdit(message) {
+    this.newType = 'EDIT';
+    this.newTarget = message.rowid;
+    console.log(this.newTarget);
+
+    if (message.decrypted) {
+      this.newText = message.decrypted.text;
+    }
   }
 }
