@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, Input } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, HostListener } from '@angular/core';
 import { MessageService } from '../message.service';
 import { EncryptService } from '../encrypt.service';
 
@@ -33,32 +33,61 @@ export class MessageComponent implements OnInit, OnChanges {
     return [year, month, day].join('-');
   }
 
+  @HostListener('window:keyup', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    console.log(event.keyCode);
+    if (event.keyCode === 27) {
+      this.newType = 'ADD';
+      this.newTarget = 0;
+      this.newText = '';
+    }
+  }
+
   ngOnInit() {
     const defaultDate = new Date();
     this.target = this.dateToString(defaultDate);
 
-    this.getMessages();
+    this.loadMessages();
   }
 
   ngOnChanges(changes) {
     if (changes.target) {
-      this.getMessages();
+      this.loadMessages();
     }
   }
 
-  getMessages() {
-    this.messageService.getMessages(this.target).subscribe(mess => {
-      this.messages = mess;
-      this.messages.map(message => message.show = this.decrypting);
-      if (this.privateKeyExists) {
-        this.decryptMessages();
-      }
+
+  loadMessages() {
+    this.messageService.getMessages(this.target).subscribe(messages => {
+      messages.sort((a, b) => a.rowid - b.rowid);
+      this.messages = [];
+      messages.map(message => {
+        message.show = this.decrypting;
+        if (this.privateKeyExists) {
+          message.decrypted = JSON.parse(this.decrypt(message.message));
+          if (message.decrypted.type === 'ADD') {
+            this.messages.push(message);
+          } else if (message.decrypted.type === 'EDIT') {
+            this.messages = this.messages.map(mess => {
+              if (mess.rowid === message.decrypted.target) {
+                mess = message;
+              }
+              return mess;
+            });
+          } else if (message.decrypted.type === 'DELETE') {
+            this.messages = this.messages.filter(el => el.rowid !== message.decrypted.target);
+          }
+        } else {
+          this.messages.push(message);
+        }
+      });
     });
   }
 
+
   postMessage(type, target, text, cb) {
     const newData: { [k: string]: any } = {};
-    const payload = {type, target, text};
+    const payload = { type, target, text };
 
     newData.message = this.encrypt(JSON.stringify(payload));
     newData.target = this.target;
@@ -95,9 +124,7 @@ export class MessageComponent implements OnInit, OnChanges {
     this.postMessage(this.newType, id, this.newText, newData => {
       this.messages = this.messages.map(mess => {
         if (mess.rowid === id) {
-          console.log(mess);
           mess = newData;
-          console.log(mess);
         }
         return mess;
       });
@@ -111,7 +138,7 @@ export class MessageComponent implements OnInit, OnChanges {
   setPrivateKey($event: string) {
     this.encryptService.setPrivateKey($event);
     this.privateKeyExists = true;
-    this.decryptMessages();
+    this.loadMessages();
   }
 
   setDecryptingEvent($event: boolean) {
@@ -126,14 +153,10 @@ export class MessageComponent implements OnInit, OnChanges {
   decrypt(text: string) {
     return this.encryptService.decrypt(text);
   }
-  decryptMessages() {
-    this.messages.map(message => message.decrypted = JSON.parse(this.decrypt(message.message)));
-  }
 
   startEdit(message) {
     this.newType = 'EDIT';
     this.newTarget = message.rowid;
-    console.log(this.newTarget);
 
     if (message.decrypted) {
       this.newText = message.decrypted.text;
