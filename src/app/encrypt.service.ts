@@ -28,4 +28,11 @@ export class EncryptService {
     return this.key.decrypt(encodedContent, 'utf-8');
   }
 
+  generatePair() {
+    this.key.generateKeyPair();
+    const pubkey = this.key.exportKey('public');
+    const prikey = this.key.exportKey();
+    return {pubkey, prikey};
+  }
+
 }

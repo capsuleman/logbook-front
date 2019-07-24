@@ -9,10 +9,15 @@
         <input name="password" [(ngModel)]="password" type="password">
     </div>
     <div class="form-field">
-        <label>Public key:</label>
-        <textarea name="publickey" rows="6" cols="65" [(ngModel)]="publickey"></textarea>
+        <label>Public key (stored on LogBook server):</label>
+        <textarea name="publickey" rows="6" cols="65" [(ngModel)]="publickey" (change)=test()></textarea>
     </div>
+    <div class="form-field">
+        <label>Private key (never send to LogBook server):</label>
+        <textarea name="privatekey" rows="15" cols="65" [(ngModel)]="privatekey" (change)=test()></textarea>
+    </div>
+    <button class="button button-primary" (click)="generate()">Generate key pair</button>
 </fieldset>
 <div class="form-buttons">
-    <button class="button button-primary" (click)="register()">Login</button>
+    <button class="button button-primary" (click)="register()" [disabled]="!valid">Login</button>
 </div>
