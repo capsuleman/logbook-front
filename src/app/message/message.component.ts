@@ -35,7 +35,6 @@ export class MessageComponent implements OnInit, OnChanges {
 
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {
-    console.log(event.keyCode);
     if (event.keyCode === 27) {
       this.newType = 'ADD';
       this.newTarget = 0;
@@ -51,7 +50,7 @@ export class MessageComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes) {
-    if (changes.target) {
+    if (changes.target && changes.target.previousValue) {
       this.loadMessages();
     }
   }
