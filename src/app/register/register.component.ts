@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { EncryptService } from '../encrypt.service';
+import { UserService } from '../user.service';
 
 
 @Component({
@@ -20,7 +21,9 @@ export class RegisterComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private encryptService: EncryptService,
-    private router: Router) { }
+    private router: Router,
+    private userService: UserService
+  ) { }
 
   ngOnInit() { }
 
@@ -28,7 +31,7 @@ export class RegisterComponent implements OnInit {
     this.authService.register(this.username, this.password)
       .subscribe(
         (res: any) => {
-          return this.authService.setPublicKey(this.publickey).subscribe((res2: any) => {
+          return this.userService.setPublicKey(this.publickey).subscribe((res2: any) => {
             console.log(res2);
             this.router.navigateByUrl('/main');
           });

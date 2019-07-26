@@ -1,28 +1,21 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/internal/operators';
 import { HttpClient } from '@angular/common/http';
 import { config } from './config';
 
 import * as moment from 'moment';
 
-import { User } from './user';
-import { UserService } from './user.service';
-
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private apiUrl = config.apiUrl;
-
   constructor(
     private http: HttpClient,
-    private userService: UserService
   ) { }
 
   login(username: string, password: string) {
-    return this.http.post(this.apiUrl + '/auth/login', { username, password })
+    return this.http.post(config.apiUrl + '/auth/login', { username, password })
       .pipe(tap(res => {
         this.setSession(res);
         return res;
@@ -30,8 +23,7 @@ export class AuthService {
   }
 
   register(username: string, password: string) {
-    console.log(this.apiUrl + '/auth/register');
-    return this.http.post(this.apiUrl + '/auth/register', { username, password })
+    return this.http.post(config.apiUrl + '/auth/register', { username, password })
       .pipe(tap(res => {
         this.setSession(res);
         return res;
@@ -43,10 +35,6 @@ export class AuthService {
 
     localStorage.setItem('id_token', authResult.token);
     localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
-  }
-
-  me(): Observable<User> {
-    return this.userService.getUser();
   }
 
   logout() {
@@ -66,13 +54,5 @@ export class AuthService {
     const expiration = localStorage.getItem('expires_at');
     const expiresAt = JSON.parse(expiration);
     return moment(expiresAt);
-  }
-
-  setPublicKey(publicKey: string) {
-    return this.http.post(this.apiUrl + '/auth/key', { key: publicKey });
-  }
-
-  deletePublicKey() {
-    return this.http.delete(this.apiUrl + '/auth/key');
   }
 }

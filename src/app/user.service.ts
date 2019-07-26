@@ -38,4 +38,13 @@ export class UserService {
     this.user = undefined;
     this.observable = undefined;
   }
+
+  setPublicKey(publicKey: string) {
+    return this.http.post(config.apiUrl + '/auth/key', { key: publicKey });
+  }
+
+  deletePublicKey() {
+    return this.http.delete(config.apiUrl + '/auth/key');
+  }
+
 }

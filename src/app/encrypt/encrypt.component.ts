@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { AuthService } from '../auth.service';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-encrypt',
@@ -18,11 +19,11 @@ export class EncryptComponent implements OnInit {
   @Output() decryptingEvent = new EventEmitter<boolean>();
 
   constructor(
-    private authService: AuthService
+    private userService: UserService
   ) { }
 
   ngOnInit() {
-    this.authService.me().subscribe((user: any) => {
+    this.userService.getUser().subscribe((user: any) => {
       this.publicKey = user.key;
       if (this.publicKey !== null && this.publicKey.length !== 0) {
         this.setPublicKey();
@@ -31,7 +32,7 @@ export class EncryptComponent implements OnInit {
   }
 
   savePublicKey() {
-    this.authService.setPublicKey(this.publicKey).subscribe(_ => {
+    this.userService.setPublicKey(this.publicKey).subscribe(_ => {
       const publicKeyText = document.getElementById('publicKeyText');
       publicKeyText.setAttribute('disabled', '');
       const publicKeyButton = document.getElementById('publicKeyButton');
