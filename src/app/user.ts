@@ -1,6 +1,5 @@
 export class User {
-    id: number;
+    rowid: number;
     username: string;
-    publickey: string;
-    token: string;
+    key: string;
   }

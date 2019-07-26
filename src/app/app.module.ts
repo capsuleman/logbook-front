@@ -15,6 +15,7 @@ import { MainComponent } from './main/main.component';
 import { CalendarComponent } from './calendar/calendar.component';
 import { EncryptComponent } from './encrypt/encrypt.component';
 import { RegisterComponent } from './register/register.component';
+import { UserComponent } from './user/user.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { RegisterComponent } from './register/register.component';
     MainComponent,
     CalendarComponent,
     EncryptComponent,
-    RegisterComponent
+    RegisterComponent,
+    UserComponent
   ],
   imports: [
     BrowserModule,
@@ -39,7 +41,7 @@ import { RegisterComponent } from './register/register.component';
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
-    }
+    },
   ],
   bootstrap: [AppComponent]
 })

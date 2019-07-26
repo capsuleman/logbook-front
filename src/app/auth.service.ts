@@ -7,6 +7,7 @@ import { config } from './config';
 import * as moment from 'moment';
 
 import { User } from './user';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,10 @@ export class AuthService {
 
   private apiUrl = config.apiUrl;
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private userService: UserService
+  ) { }
 
   login(username: string, password: string) {
     return this.http.post(this.apiUrl + '/auth/login', { username, password })
@@ -42,7 +46,7 @@ export class AuthService {
   }
 
   me(): Observable<User> {
-    return this.http.get<User>(this.apiUrl + '/auth/me');
+    return this.userService.getUser();
   }
 
   logout() {
@@ -65,7 +69,7 @@ export class AuthService {
   }
 
   setPublicKey(publicKey: string) {
-    return this.http.post(this.apiUrl + '/auth/key', {key: publicKey});
+    return this.http.post(this.apiUrl + '/auth/key', { key: publicKey });
   }
 
   deletePublicKey() {
