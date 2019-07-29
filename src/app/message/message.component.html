@@ -1,6 +1,6 @@
 <h2>Content</h2>
 <table>
-    <tr *ngFor="let message of messages" (dblclick)="startEdit(message)">
+    <tr *ngFor="let message of messages" (dblclick)="message.show = !message.show">
         <td>
             <pre>{{ message.post }}</pre>
         </td>
@@ -11,6 +11,8 @@
             <pre class="text">{{ splitMessage(message.message) }}</pre>
         </td>
         <td>
+            <button (click)="startEdit(message)">Edit</button>
+            <br />
             <button (click)="deleteMessage(message.rowid)">Delete</button>
         </td>
     </tr>
