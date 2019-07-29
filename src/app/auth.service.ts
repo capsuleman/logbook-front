@@ -55,4 +55,9 @@ export class AuthService {
     const expiresAt = JSON.parse(expiration);
     return moment(expiresAt);
   }
+
+  isFree(username: string) {
+    return this.http.get(config.apiUrl + '/auth/isfree/' + username);
+  }
+
 }

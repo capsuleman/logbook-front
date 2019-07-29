@@ -2,7 +2,7 @@
     <legend>Register</legend>
     <div class="form-field">
         <label>Username:</label>
-        <input name="username" [(ngModel)]="username">
+        <input name="username" [(ngModel)]="username" (input)=isFree()>{{ isFreeText }}
     </div>
     <div class="form-field">
         <label>Password:</label>

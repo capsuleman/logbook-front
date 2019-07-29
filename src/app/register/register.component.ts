@@ -17,6 +17,7 @@ export class RegisterComponent implements OnInit {
   private publickey: string;
   private privatekey: string;
   private valid = false;
+  private isFreeText = '';
 
   constructor(
     private authService: AuthService,
@@ -52,9 +53,23 @@ export class RegisterComponent implements OnInit {
       this.encryptService.setPrivateKey(this.privatekey);
       this.encryptService.setPublicKey(this.publickey);
       this.valid = stringToTest === this.encryptService.decrypt(this.encryptService.encrypt(stringToTest));
-      console.log(this.encryptService.decrypt(this.encryptService.encrypt(stringToTest)));
     } catch (err) {
       this.valid = false;
     }
+  }
+
+  isFree() {
+    this.isFreeText = '...';
+    const oldValid = this.valid;
+    this.valid = false;
+    this.authService.isFree(this.username).subscribe(num => {
+      console.log(num);
+      if (num === 0) {
+        this.isFreeText = 'Free';
+        this.valid = oldValid;
+      } else {
+        this.isFreeText = 'Used';
+      }
+    });
   }
 }
