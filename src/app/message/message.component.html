@@ -1,15 +1,20 @@
 <h2>Content</h2>
-<ul>
-    <li *ngFor="let message of messages" (dblclick)="startEdit(message)">
-        <span *ngIf="message.show && message.decrypted">
-            {{ message.post }}: {{ message.decrypted.text }}
-        </span>
-        <span *ngIf="!(message.show && message.decrypted)">
-            {{ message.post }}: {{ message.message }}
-        </span>
-        <button (click)="deleteMessage(message.rowid)">Delete</button>
-    </li>
-</ul>
+<table>
+    <tr *ngFor="let message of messages" (dblclick)="startEdit(message)">
+        <td>
+            <pre>{{ message.post }}</pre>
+        </td>
+        <td *ngIf="message.show && message.decrypted">
+            <pre class="text">{{ message.decrypted.text }}</pre>
+        </td>
+        <td *ngIf="!(message.show && message.decrypted)">
+            <pre class="text">{{ splitMessage(message.message) }}</pre>
+        </td>
+        <td>
+            <button (click)="deleteMessage(message.rowid)">Delete</button>
+        </td>
+    </tr>
+</table>
 
 <textarea [(ngModel)]="newText"></textarea>
 <button *ngIf="newType=='ADD'" class="button button-primary" (click)="addMessage()">Add</button>

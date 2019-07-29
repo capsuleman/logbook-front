@@ -161,4 +161,13 @@ export class MessageComponent implements OnInit, OnChanges {
       this.newText = message.decrypted.text;
     }
   }
+
+  splitMessage(message) {
+    let splited = '';
+    console.log(message.length);
+    for (let i = 0; i < message.length; i = i + 172) {
+      splited += message.substring(i, i + 172) + '\n';
+    }
+    return splited.substring(0, splited.length - 2);
+  }
 }
