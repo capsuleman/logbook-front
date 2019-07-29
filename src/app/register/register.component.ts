@@ -32,11 +32,10 @@ export class RegisterComponent implements OnInit {
       .subscribe(
         (res: any) => {
           return this.userService.setPublicKey(this.publickey).subscribe((res2: any) => {
-            console.log(res2);
             this.router.navigateByUrl('/main');
           });
         },
-        err => console.log(err.error.auth)
+        err => console.error(err.error.auth)
       );
   }
 
