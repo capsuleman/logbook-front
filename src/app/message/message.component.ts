@@ -18,7 +18,6 @@ export class MessageComponent implements OnInit, OnChanges {
   private newText = '';
   private newType = 'ADD';
   private newTarget = 0;
-  private decrypting = false;
   private privateKeyExists = false;
   @Input() target: string;
 
@@ -36,9 +35,7 @@ export class MessageComponent implements OnInit, OnChanges {
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {
     if (event.keyCode === 27) {
-      this.newType = 'ADD';
-      this.newTarget = 0;
-      this.newText = '';
+      this.stopEdit();
     }
   }
 
@@ -61,7 +58,7 @@ export class MessageComponent implements OnInit, OnChanges {
       messages.sort((a, b) => a.rowid - b.rowid);
       this.messages = [];
       messages.map(message => {
-        message.show = this.decrypting;
+        message.show = false;
         if (this.privateKeyExists) {
           message.decrypted = JSON.parse(this.decrypt(message.message));
           if (message.decrypted.type === 'ADD') {
@@ -95,7 +92,6 @@ export class MessageComponent implements OnInit, OnChanges {
       newData.decrypted = payload;
       newData.post = new Date().toISOString().substring(0, 19);
       newData.rowid = id;
-      newData.show = this.decrypting;
 
       cb(newData);
 
@@ -140,11 +136,6 @@ export class MessageComponent implements OnInit, OnChanges {
     this.loadMessages();
   }
 
-  setDecryptingEvent($event: boolean) {
-    this.decrypting = $event;
-    this.messages.map(message => message.show = $event);
-  }
-
   encrypt(text: string) {
     return this.encryptService.encrypt(text);
   }
@@ -162,12 +153,19 @@ export class MessageComponent implements OnInit, OnChanges {
     }
   }
 
-  splitMessage(message) {
+  splitMessage(message, len, short) {
     let splited = '';
-    console.log(message.length);
-    for (let i = 0; i < message.length; i = i + 172) {
-      splited += message.substring(i, i + 172) + '\n';
+    const limit = short ? len : message.length;
+    for (let i = 0; i < limit; i = i + len) {
+      splited += message.substring(i, i + len) + '\n';
     }
-    return splited.substring(0, splited.length - 2);
+    return splited;
+  }
+
+  stopEdit() {
+    this.newType = 'ADD';
+    this.newTarget = 0;
+    this.newText = '';
+
   }
 }

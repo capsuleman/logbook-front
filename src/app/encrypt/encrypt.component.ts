@@ -11,12 +11,10 @@ export class EncryptComponent implements OnInit {
 
   privateKey = '';
   publicKey = '';
-  decrypting = false;
-  showCheckbox = false;
+  isPrivateKeySet = false;
 
   @Output() privateKeyEvent = new EventEmitter<string>();
   @Output() publicKeyEvent = new EventEmitter<string>();
-  @Output() decryptingEvent = new EventEmitter<boolean>();
 
   constructor(
     private userService: UserService
@@ -47,12 +45,6 @@ export class EncryptComponent implements OnInit {
 
   setPrivateKey() {
     this.privateKeyEvent.emit(this.privateKey);
-    this.decrypting = true;
-    this.setDecryptingEvent();
-    this.showCheckbox = true;
-  }
-
-  setDecryptingEvent() {
-    this.decryptingEvent.emit(this.decrypting);
+    this.isPrivateKeySet = true;
   }
 }

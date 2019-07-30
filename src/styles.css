@@ -1,1 +1,23 @@
 /* You can add global styles to this file, and also import other style files */
+.col-centered {
+    float: none;
+    margin: 0 auto;
+}
+
+.border-between > [class*='col-']:before {
+    background: #e3e3e3;
+    bottom: 0;
+    content: " ";
+    left: 0;
+    position: absolute;
+    width: 1px;
+    top: 0;
+ }
+ 
+ .border-between > [class*='col-']:first-child:before {
+    display: none;
+ }
+
+ body {
+    padding-bottom: 5%;
+}

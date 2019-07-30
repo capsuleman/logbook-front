@@ -1,15 +1,23 @@
-<div>
-    <div>Public key (stored in server)</div>
-
-    <textarea [(ngModel)]="publicKey" rows="6" cols="65" id="publicKeyText" style="resize:none"></textarea>
-    <button (click)="savePublicKey()" id="publicKeyButton">Save public key</button>
-</div>
-<div>
-    <div>Private key (stored in server)</div>
-    <textarea [(ngModel)]="privateKey" rows="15" cols="65" style="resize:none"></textarea>
-    <button (click)="setPrivateKey()">Use private key</button>
-</div>
-<div *ngIf="showCheckbox">
-    <div>Decrypting?</div>
-    <input type="checkbox" (change)="setDecryptingEvent()" [(ngModel)]="decrypting">
+<div class="row border-between">
+    <div style="text-align: right" class="col-lg-6">
+        <h5>Public key (stored in server)</h5>
+        <pre>{{ publicKey }}</pre>
+    </div>
+    <div style="text-align: left" class="col-lg-6">
+        <h5>Private key (never send to server)</h5>
+        <div *ngIf="!isPrivateKeySet">
+            <textarea [(ngModel)]="privateKey" rows="7" cols="65" style="resize:none"></textarea>
+            <div class="col-centered col-lg-6">
+                <button class="btn btn-success btn-block" (click)="setPrivateKey()">
+                        <span class="ion ion-md-key"></span> Use private key</button>
+            </div>
+        </div>
+        <div *ngIf="isPrivateKeySet">
+            <pre>{{ privateKey }}</pre>
+            <div class="col-centered col-lg-6">
+                <button class="btn btn-warning btn-block" (click)="isPrivateKeySet=false">
+                        <span class="ion ion-md-key"></span> Change private key</button>
+            </div>
+        </div>
+    </div>
 </div>

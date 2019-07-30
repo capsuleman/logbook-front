@@ -1,16 +1,17 @@
-<fieldset>
-    <legend>Login</legend>
-    <div class="form-field">
-        <label>Username:</label>
-        <input name="username" [(ngModel)]="username">
+<form class="form-signin">
+    <div class="text-center mb-4">
+        <img class="mb-4" src="assets/logfeeder.png" alt="" width="72" height="72">
+        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
     </div>
-    <div class="form-field">
-        <label>Password:</label>
-        <input name="password" [(ngModel)]="password" type="password">
-    </div>
-    <div class="form-buttons">
-        <button class="button button-primary" (click)="login()">Login</button>
-    </div>
-</fieldset>
+
+    <label for="inputUsername" class="sr-only">Username</label>
+    <input [(ngModel)]="username" name="username" type="text" id="inputUsername" class="form-control"
+        placeholder="Username" required="" autofocus="">
+    <label for="inputPassword" class="sr-only">Password</label>
+    <input [(ngModel)]="password" name="password" type="password" id="inputPassword" class="form-control"
+        placeholder="Password" required="">
+
+    <button class="btn btn-lg btn-primary btn-block" (click)="login()" type="submit">Sign in</button>
+</form>
 
 No account? Please <a routerLink="/register">sign-in</a>.
