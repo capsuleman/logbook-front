@@ -1,21 +1,21 @@
-<label for="date-select">Choose a date:</label>
-
-<select id="date-select" (change)="sendDate()" [(ngModel)]="target">
-    <option *ngFor="let date of dates" [value]="date" [selected]="date == target">{{ date }}</option>
-</select>
-
-
-<div class="container">
-    <div class="row">
-        <div class='col-sm-6'>
-            <div class="form-group">
-                <div class='input-group date' id='datetimepicker1'>
-                    <input type='text' class="form-control" />
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
-                </div>
+<form class="form-inline">
+    <div class="form-group">
+        <div class="input-group">
+            <input class="form-control" placeholder="Pick a date (YYYY-MM-DD)" name="dp" [(ngModel)]="target"
+                (dateSelect)="sendDate()" [dayTemplate]="customDay" ngbDatepicker #d="ngbDatepicker">
+            <div class="input-group-append">
+                <button class="btn btn-info" (click)="d.toggle()" type="button">
+                    <span class="ion ion-md-calendar"></span>
+                </button>
             </div>
         </div>
     </div>
-</div>
+</form>
+
+<ng-template #customDay let-date let-currentMonth="currentMonth" let-selected="selected" let-disabled="disabled"
+    let-focused="focused">
+    <span class="custom-day" [class.active]="isInDates(date)" [class.hidden]="date.month !== currentMonth"
+        [class.selected]="selected" [class.bg-primary]="selected" [class.focused]="focused">
+        {{ date.day }}
+    </span>
+</ng-template>

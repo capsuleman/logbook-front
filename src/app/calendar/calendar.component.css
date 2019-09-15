@@ -1,0 +1,41 @@
+.custom-day {
+    text-align: center;
+    padding: 0.185rem 0.25rem;
+    border-radius: 1rem;
+    display: inline-block;
+    width: 2rem;
+}
+
+.custom-day:hover, .custom-day.focused {
+    background-color: grey;
+    color: white;
+}
+
+.active {
+    background-color: rgb(110, 192, 204);
+    color: white;
+}
+
+.active:hover, .active.focused {
+    background-color: rgb(23, 162, 184, 1);
+}
+
+.hidden {
+    color: grey;
+}
+
+.hidden.active {
+    background-color: rgb(220, 234, 236);
+    color: white;
+}
+
+.hidden:hover, .hidden.focused {
+    background-color: rgb(195, 223, 228);
+    color: white;
+}
+
+.selected {
+    border-radius: 0.25rem;
+    background-color: #007bff;
+    color: white;
+}

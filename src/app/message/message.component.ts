@@ -14,11 +14,11 @@ export class MessageComponent implements OnInit, OnChanges {
     private encryptService: EncryptService
   ) { }
 
-  private messages = [];
-  private newText = '';
-  private newType = 'ADD';
-  private newTarget = 0;
-  private privateKeyExists = false;
+  messages = [];
+  newText = '';
+  newType = 'ADD';
+  newTarget = 0;
+  privateKeyExists = false;
   @Input() target: string;
 
   private dateToString(d: Date) {

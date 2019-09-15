@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { MessageService } from '../message.service';
+import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-calendar',
@@ -8,46 +9,37 @@ import { MessageService } from '../message.service';
 })
 export class CalendarComponent implements OnInit {
 
-  constructor(private messageService: MessageService) { }
+  constructor(
+    private messageService: MessageService
+  ) { }
 
   dates = [];
-  target = '';
-
+  target: NgbDate;
   @Output() dateEvent = new EventEmitter<string>();
 
-  private dateToString(d: Date) {
-    let month = '' + (d.getMonth() + 1);
-    let day = '' + d.getDate();
-    const year = d.getFullYear();
+  private dateToNgbDate(date: Date): NgbDate {
+    return new NgbDate(date.getUTCFullYear(), date.getUTCMonth() + 1, date.getUTCDate());
+  }
 
-    if (month.length < 2) { month = '0' + month; }
-    if (day.length < 2) { day = '0' + day; }
-
-    return [year, month, day].join('-');
+  private ngbDateToString(date: NgbDate): string {
+    const m = date.month < 10 ? '0' + date.month : date.month;
+    const d = date.day < 10 ? '0' + date.day : date.day;
+    return date.year + '-' + m + '-' + d;
   }
 
   ngOnInit() {
-    const defaultDate = new Date();
-    this.target = this.dateToString(defaultDate);
-    this.dates.push(this.target);
-
-    this.messageService.getDate().subscribe(d => {
-      d.map(el => {
-        if (this.dates.indexOf(el) === -1) {
-          this.dates.push(el);
-        }
-      });
-      this.dates.sort((a, b) => {
-        const aDate = new Date(a);
-        const bDate = new Date(b);
-        return bDate.getTime() - aDate.getTime();
-      });
-    });
+    const today = new Date();
+    this.target = this.dateToNgbDate(today);
     this.sendDate();
+
+    this.messageService.getDate().subscribe(d => this.dates = d);
   }
 
   sendDate() {
-    this.dateEvent.emit(this.target);
+    this.dateEvent.emit(this.ngbDateToString(this.target));
   }
 
+  isInDates(date: NgbDate) {
+    return this.dates.indexOf(this.ngbDateToString(date)) !== -1;
+  }
 }

@@ -12,12 +12,12 @@ import { UserService } from '../user.service';
 })
 export class RegisterComponent implements OnInit {
 
-  private username: string;
-  private password: string;
-  private publickey: string;
-  private privatekey: string;
-  private valid = false;
-  private isFreeText = '';
+  username: string;
+  password: string;
+  publickey: string;
+  privatekey: string;
+  valid = false;
+  isFreeText = '';
 
   constructor(
     private authService: AuthService,
