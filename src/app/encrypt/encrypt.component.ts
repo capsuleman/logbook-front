@@ -22,7 +22,7 @@ export class EncryptComponent implements OnInit {
 
   ngOnInit() {
     this.userService.getUser().subscribe((user: any) => {
-      this.publicKey = user.key;
+      this.publicKey = user.pubkey;
       if (this.publicKey !== null && this.publicKey.length !== 0) {
         this.setPublicKey();
       }

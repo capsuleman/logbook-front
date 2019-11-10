@@ -30,12 +30,12 @@ export class RegisterComponent implements OnInit {
 
   register() {
     this.authService.register(this.username, this.password)
-      .subscribe(
-        (res: any) => {
-          return this.userService.setPublicKey(this.publickey).subscribe((res2: any) => {
+      .subscribe(() => {
+        return this.userService.setPublicKey(this.publickey)
+          .subscribe(() => {
             this.router.navigateByUrl('/main');
           });
-        },
+      },
         err => console.error(err.error.auth)
       );
   }
@@ -63,7 +63,6 @@ export class RegisterComponent implements OnInit {
     const oldValid = this.valid;
     this.valid = false;
     this.authService.isFree(this.username).subscribe(num => {
-      console.log(num);
       if (num === 0) {
         this.isFreeText = 'Free';
         this.valid = oldValid;

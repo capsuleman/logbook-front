@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { User } from './user';
 import { of, Observable } from 'rxjs';
 import { tap, share } from 'rxjs/internal/operators';
-import { config } from './config';
+import { config } from './config.js';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({

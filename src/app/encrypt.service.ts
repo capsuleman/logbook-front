@@ -32,7 +32,8 @@ export class EncryptService {
     this.key.generateKeyPair();
     const pubkey = this.key.exportKey('public');
     const prikey = this.key.exportKey();
-    return {pubkey, prikey};
+
+    return { pubkey, prikey };
   }
 
 }
